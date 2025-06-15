@@ -95,39 +95,46 @@ await fastify.listen({ port: 3000 })
 Apply multiple transformations by providing an array of handlers:
 
 ```javascript
+const presetSchema = (routeOptions, presetOptions) => {
+  if (presetOptions.schema) {
+    routeOptions.schema = {
+      ...presetOptions.schema,
+      ...routeOptions.schema,
+    }
+  }
+}
+
+const presetConstraint = (routeOptions, presetOptions) => {
+  if (presetOptions.constraints) {
+    routeOptions.constraints = {
+      ...presetOptions.constraints,
+      ...routeOptions.constraints,
+    }
+  }
+}
+
+const presetPreHandler = (routeOptions, presetOptions) => {
+  if (presetOptions.preHandler) {
+    const existingPreHandler = routeOptions.preHandler || []
+    routeOptions.preHandler = [
+      ...(Array.isArray(existingPreHandler) ? existingPreHandler : [existingPreHandler]),
+      ...(Array.isArray(presetOptions.preHandler)
+        ? presetOptions.preHandler
+        : [presetOptions.preHandler]),
+    ]
+  }
+}
+
+// Register the plugin
 fastify.register(fastifyRoutePreset, {
   onPresetRoute: [
     // Handler 1: Apply schema defaults
-    (routeOptions, presetOptions) => {
-      if (presetOptions.schema) {
-        routeOptions.schema = {
-          ...presetOptions.schema,
-          ...routeOptions.schema,
-        }
-      }
-    },
-    
+    presetSchema,
     // Handler 2: Apply constraints
-    (routeOptions, presetOptions) => {
-      if (presetOptions.constraints) {
-        routeOptions.constraints = {
-          ...presetOptions.constraints,
-          ...routeOptions.constraints,
-        }
-      }
-    },
-    
+    presetConstraint,
     // Handler 3: Apply hooks
-    (routeOptions, presetOptions) => {
-      if (presetOptions.preHandler) {
-        const existingPreHandler = routeOptions.preHandler || []
-        routeOptions.preHandler = [
-          ...(Array.isArray(existingPreHandler) ? existingPreHandler : [existingPreHandler]),
-          ...(Array.isArray(presetOptions.preHandler) ? presetOptions.preHandler : [presetOptions.preHandler])
-        ]
-      }
-    }
-  ]
+    presetPreHandler,
+  ],
 })
 ```
 
