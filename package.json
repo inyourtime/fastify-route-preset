@@ -1,6 +1,6 @@
 {
   "name": "fastify-route-preset",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A Fastify plugin for applying preset-based route modifications using onRoute hooks.",
   "type": "commonjs",
   "main": "index.js",
