@@ -16,6 +16,12 @@ This plugin enables you to create preset configurations that can be applied to m
 - **Seamless Integration**: Works with existing Fastify routing patterns
 - **Flexible Architecture**: Customize how presets modify route options
 
+## Compatibility
+
+| Plugin Version | Fastify Version |
+|:--------------:|:---------------:|
+| `>= 0.1.0`     | `>= 5.x`        |
+
 ## Installation
 
 ```bash
