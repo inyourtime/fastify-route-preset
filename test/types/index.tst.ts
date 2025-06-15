@@ -7,16 +7,16 @@ const app = Fastify()
 
 app.register(fastifyRoutePreset, {
   onPresetRoute: (routeOptions, presetOptions) => {
-    expect<RouteOptions>().type.toBe(routeOptions)
-    expect<unknown>().type.toBe(presetOptions)
+    expect(routeOptions).type.toBe<RouteOptions>()
+    expect(presetOptions).type.toBe<unknown>()
   },
 })
 
 app.register(fastifyRoutePreset, {
   onPresetRoute: [
     (routeOptions, presetOptions) => {
-      expect<RouteOptions>().type.toBe(routeOptions)
-      expect<unknown>().type.toBe(presetOptions)
+      expect(routeOptions).type.toBe<RouteOptions>()
+      expect(presetOptions).type.toBe<unknown>()
     },
   ],
 })
