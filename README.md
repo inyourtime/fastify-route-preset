@@ -179,7 +179,7 @@ interface FastifyRoutePresetOptions {
 
 type OnPresetRoute = (
   routeOptions: RouteOptions,
-  presetOptions: unknown
+  presetOptions: any
 ) => void
 ```
 
