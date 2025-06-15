@@ -21,7 +21,7 @@ declare namespace fastifyRoutePreset {
     onPresetRoute: OnPresetRoute | OnPresetRoute[]
   }
 
-  export type OnPresetRoute = (routeOptions: RouteOptions, presetOptions: unknown) => void
+  export type OnPresetRoute = (routeOptions: RouteOptions, presetOptions: any) => void
 
   export const fastifyRoutePreset: FastifyRoutePreset
   export { fastifyRoutePreset as default }
@@ -30,4 +30,5 @@ declare namespace fastifyRoutePreset {
 declare function fastifyRoutePreset(
   ...params: Parameters<FastifyRoutePreset>
 ): ReturnType<FastifyRoutePreset>
+
 export = fastifyRoutePreset
