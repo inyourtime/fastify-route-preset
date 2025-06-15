@@ -31,7 +31,7 @@ import fastifyRoutePreset from 'fastify-route-preset'
 const fastify = Fastify()
 
 // Register the plugin
-await fastify.register(fastifyRoutePreset, {
+fastify.register(fastifyRoutePreset, {
   onPresetRoute: (routeOptions, presetOptions) => {
     // Merge preset schema with route schema
     routeOptions.schema = {
@@ -69,7 +69,7 @@ await fastify.listen({ port: 3000 })
 Apply multiple transformations by providing an array of handlers:
 
 ```javascript
-await fastify.register(fastifyRoutePreset, {
+fastify.register(fastifyRoutePreset, {
   onPresetRoute: [
     // Handler 1: Apply schema defaults
     (routeOptions, presetOptions) => {
@@ -109,7 +109,7 @@ await fastify.register(fastifyRoutePreset, {
 
 ```javascript
 // Register routes with comprehensive preset
-await fastify.register(async function (fastify) {
+fastify.register(async function (fastify) {
   fastify.get('/admin/users', {
     handler: async (request, reply) => {
       return { adminUsers: [] }
@@ -168,7 +168,7 @@ type OnPresetRoute = (
 When registering routes, include a `preset` option:
 
 ```javascript
-await fastify.register(routePlugin, {
+fastify.register(routePlugin, {
   preset: {
     // Your preset configuration
     schema: { /* OpenAPI schema */ },
@@ -186,7 +186,7 @@ await fastify.register(routePlugin, {
 ```javascript
 import v1Routes from './routes/v1.js'
 
-await fastify.register(v1Routes, {
+fastify.register(v1Routes, {
   preset: {
     constraints: { version: '1.0.0' },
     schema: { tags: ['v1'] }
@@ -200,7 +200,7 @@ await fastify.register(v1Routes, {
 import { authMiddleware } from './middleware/auth.js'
 import protectedRoutes from './routes/protected.js'
 
-await fastify.register(protectedRoutes, {
+fastify.register(protectedRoutes, {
   preset: {
     preHandler: [authMiddleware],
     schema: {
@@ -215,7 +215,7 @@ await fastify.register(protectedRoutes, {
 ```javascript
 import userRoutes from './routes/users.js'
 
-await fastify.register(userRoutes, {
+fastify.register(userRoutes, {
   preset: {
     schema: {
       tags: ['users'],
