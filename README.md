@@ -1,0 +1,1 @@
+# fastify-route-preset

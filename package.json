@@ -1,0 +1,58 @@
+{
+  "name": "fastify-route-preset",
+  "version": "0.0.0",
+  "description": "A Fastify plugin for applying preset-based route modifications using onRoute hooks.",
+  "type": "commonjs",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:unit": "c8 --100 node --test **/*.test.js",
+    "test:typescript": "tstyche"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inyourtime/fastify-route-preset.git"
+  },
+  "homepage": "https://github.com/inyourtime/fastify-route-preset#readme",
+  "keywords": [
+    "fastify",
+    "routes",
+    "onRoute",
+    "onRegister",
+    "plugin",
+    "route-preset",
+    "fastify-plugin",
+    "preset"
+  ],
+  "author": "Sahachai (https://github.com/inyourtime)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inyourtime/fastify-route-preset/issues"
+  },
+  "dependencies": {
+    "fastify-plugin": "^5.0.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@fastify/pre-commit": "^2.2.0",
+    "@types/node": "^24.0.1",
+    "c8": "^10.1.3",
+    "fastify": "^5.4.0",
+    "tstyche": "^4.0.1",
+    "typescript": "^5.8.3"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
+}
