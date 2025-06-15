@@ -66,6 +66,26 @@ fastify.register(async function (fastify) {
 })
 
 await fastify.listen({ port: 3000 })
+
+// Result: Both routes will have the preset schema applied
+// [
+//   {
+//     method: 'GET',
+//     url: '/users',
+//     schema: {
+//       tags: [ 'users' ],
+//       security: [ { bearerAuth: [] } ]
+//     }
+//   },
+//   {
+//     method: 'POST',
+//     url: '/users',
+//     schema: {
+//       tags: [ 'users' ],
+//       security: [ { bearerAuth: [] } ]
+//     }
+//   }
+// ]
 ```
 
 ## Advanced Usage
