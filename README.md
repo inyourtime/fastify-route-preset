@@ -1,1 +1,234 @@
 # fastify-route-preset
+
+[![CI](https://github.com/inyourtime/fastify-route-preset/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/inyourtime/fastify-route-preset/actions/workflows/ci.yml)
+[![NPM version](https://img.shields.io/npm/v/fastify-route-preset.svg?style=flat)](https://www.npmjs.com/package/fastify-route-preset)
+
+A Fastify plugin that streamlines route configuration through preset-based modifications. Define reusable route patterns and apply them consistently across your application using onRoute hooks.
+
+## Overview
+
+This plugin enables you to create preset configurations that can be applied to multiple routes, eliminating repetitive route setup and ensuring consistency across your API endpoints.
+
+## Key Features
+
+- **Preset-based Configuration**: Define reusable route configurations
+- **Multiple Handler Support**: Chain multiple preset handlers for complex modifications
+- **Seamless Integration**: Works with existing Fastify routing patterns
+- **Flexible Architecture**: Customize how presets modify route options
+
+## Installation
+
+```bash
+npm install fastify-route-preset
+```
+
+## Quick Start
+
+```javascript
+import Fastify from 'fastify'
+import fastifyRoutePreset from 'fastify-route-preset'
+
+const fastify = Fastify()
+
+// Register the plugin
+await fastify.register(fastifyRoutePreset, {
+  onPresetRoute: (routeOptions, presetOptions) => {
+    // Merge preset schema with route schema
+    routeOptions.schema = {
+      ...presetOptions.schema,
+      ...routeOptions.schema,
+    }
+  }
+})
+
+// Apply preset to route group
+fastify.register(async function (fastify) {
+  fastify.get('/users', async (request, reply) => {
+    return { users: [] }
+  })
+  
+  fastify.post('/users', async (request, reply) => {
+    return { created: true }
+  })
+}, {
+  preset: {
+    schema: { 
+      tags: ['users'],
+      security: [{ bearerAuth: [] }]
+    }
+  }
+})
+
+await fastify.listen({ port: 3000 })
+```
+
+## Advanced Usage
+
+### Chaining Multiple Handlers
+
+Apply multiple transformations by providing an array of handlers:
+
+```javascript
+await fastify.register(fastifyRoutePreset, {
+  onPresetRoute: [
+    // Handler 1: Apply schema defaults
+    (routeOptions, presetOptions) => {
+      if (presetOptions.schema) {
+        routeOptions.schema = {
+          ...presetOptions.schema,
+          ...routeOptions.schema,
+        }
+      }
+    },
+    
+    // Handler 2: Apply constraints
+    (routeOptions, presetOptions) => {
+      if (presetOptions.constraints) {
+        routeOptions.constraints = {
+          ...presetOptions.constraints,
+          ...routeOptions.constraints,
+        }
+      }
+    },
+    
+    // Handler 3: Apply hooks
+    (routeOptions, presetOptions) => {
+      if (presetOptions.preHandler) {
+        const existingPreHandler = routeOptions.preHandler || []
+        routeOptions.preHandler = [
+          ...(Array.isArray(existingPreHandler) ? existingPreHandler : [existingPreHandler]),
+          ...(Array.isArray(presetOptions.preHandler) ? presetOptions.preHandler : [presetOptions.preHandler])
+        ]
+      }
+    }
+  ]
+})
+```
+
+### Complex Preset Example
+
+```javascript
+// Register routes with comprehensive preset
+await fastify.register(async function (fastify) {
+  fastify.get('/admin/users', {
+    handler: async (request, reply) => {
+      return { adminUsers: [] }
+    }
+  })
+  
+  fastify.delete('/admin/users/:id', {
+    handler: async (request, reply) => {
+      return { deleted: true }
+    }
+  })
+}, {
+  preset: {
+    schema: {
+      tags: ['admin'],
+      security: [{ adminAuth: [] }]
+    },
+    constraints: {
+      version: '2.0.0'
+    },
+    preHandler: [
+      async (request, reply) => {
+        // Admin authentication logic
+        if (!request.user?.isAdmin) {
+          throw new Error('Admin required')
+        }
+      }
+    ]
+  }
+})
+```
+
+## API Reference
+
+### Plugin Registration Options
+
+```typescript
+interface FastifyRoutePresetOptions {
+  onPresetRoute: OnPresetRoute | OnPresetRoute[]
+}
+
+type OnPresetRoute = (
+  routeOptions: RouteOptions,
+  presetOptions: unknown
+) => void
+```
+
+**Parameters:**
+
+- `onPresetRoute`: Function or array of functions called when registering routes with presets
+  - `routeOptions`: Fastify route options object (mutable)
+  - `presetOptions`: Preset configuration object
+
+### Route Registration
+
+When registering routes, include a `preset` option:
+
+```javascript
+await fastify.register(routePlugin, {
+  preset: {
+    // Your preset configuration
+    schema: { /* OpenAPI schema */ },
+    constraints: { /* route constraints */ },
+    preHandler: [ /* hooks */ ],
+    // ... any other route options
+  }
+})
+```
+
+## Common Use Cases
+
+### API Versioning
+
+```javascript
+import v1Routes from './routes/v1.js'
+
+await fastify.register(v1Routes, {
+  preset: {
+    constraints: { version: '1.0.0' },
+    schema: { tags: ['v1'] }
+  }
+})
+```
+
+### Authentication Presets
+
+```javascript
+import { authMiddleware } from './middleware/auth.js'
+import protectedRoutes from './routes/protected.js'
+
+await fastify.register(protectedRoutes, {
+  preset: {
+    preHandler: [authMiddleware],
+    schema: {
+      security: [{ bearerAuth: [] }]
+    }
+  }
+})
+```
+
+### Documentation Grouping
+
+```javascript
+import userRoutes from './routes/users.js'
+
+await fastify.register(userRoutes, {
+  preset: {
+    schema: {
+      tags: ['users'],
+      description: 'User management endpoints'
+    }
+  }
+})
+```
+
+## Contributing
+
+Contributions are welcome!
+
+## License
+
+MIT
