@@ -85,6 +85,50 @@ await fastify.listen({ port: 3000 })
 
 In this example, instead of manually adding `tags: ['users']` and `security: [{ bearerAuth: [] }]` to each route, the preset automatically applies these properties to all routes within the registration context.
 
+## Using with @fastify/autoload
+
+The `fastify-route-preset` plugin works seamlessly with [`@fastify/autoload`](https://github.com/fastify/fastify-autoload) for automatic route discovery and registration. You can define presets in your route files using the `autoConfig` export, making it easy to organize and configure routes across your application.
+
+### Route File Configuration
+
+Create route files with the `autoConfig` export to define presets:
+
+```javascript
+// routes/user.js
+export default async function (fastify) {
+  fastify.get('/', (_req, reply) => {
+    reply.send('hello world')
+  })
+
+  fastify.post('/', (_req, reply) => {
+    reply.send('hello world')
+  })
+}
+
+export const autoConfig = {
+  prefix: '/user',
+  preset: {
+    schema: { tags: ['user'] },
+    constraints: { version: '1.0.0' },
+  },
+}
+
+// index.js
+// Register autoload to automatically discover and load routes
+fastify.register(fastifyAutoload, {
+  dir: join(__dirname, 'routes'),
+  dirNameRoutePrefix: false,
+})
+```
+
+The resulting routes will have the preset configurations automatically applied:
+
+```javascript
+// Generated routes for user.js:
+// GET /user/ - with tags: ['user'], version: '1.0.0'
+// POST /user/ - with tags: ['user'], version: '1.0.0'
+```
+
 ## Advanced Usage
 
 ### Multiple Handlers
