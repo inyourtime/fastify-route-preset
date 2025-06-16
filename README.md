@@ -3,24 +3,11 @@
 [![CI](https://github.com/inyourtime/fastify-route-preset/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/inyourtime/fastify-route-preset/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/fastify-route-preset.svg?style=flat)](https://www.npmjs.com/package/fastify-route-preset)
 
-A Fastify plugin that streamlines route configuration through preset-based modifications. Define reusable route patterns and apply them consistently across your application using onRoute hooks.
+A Fastify plugin that streamlines route configuration through preset-based modifications. Define reusable route patterns and apply them consistently across your application using `onRoute` hooks.
 
 ## Overview
 
 This plugin enables you to create preset configurations that can be applied to multiple routes, eliminating repetitive route setup and ensuring consistency across your API endpoints.
-
-## Key Features
-
-- **Preset-based Configuration**: Define reusable route configurations
-- **Multiple Handler Support**: Chain multiple preset handlers for complex modifications
-- **Seamless Integration**: Works with existing Fastify routing patterns
-- **Flexible Architecture**: Customize how presets modify route options
-
-## Compatibility
-
-| Plugin Version | Fastify Version |
-|:--------------:|:---------------:|
-| `>= 0.1.0`     | `>= 5.x`        |
 
 ## Installation
 
@@ -28,7 +15,15 @@ This plugin enables you to create preset configurations that can be applied to m
 npm install fastify-route-preset
 ```
 
-## Quick Start
+## Compatibility
+
+| Plugin Version | Fastify Version |
+|:--------------:|:---------------:|
+| `>=0.x`        | `^5.x`          |
+
+## Usage
+
+The `fastify-route-preset` plugin works by leveraging Fastify's `onRoute` hook to intercept route registration and apply preset configurations. This allows you to define common route properties once and reuse them across multiple routes, promoting consistency and reducing code duplication.
 
 ```javascript
 import Fastify from 'fastify'
@@ -88,9 +83,11 @@ await fastify.listen({ port: 3000 })
 // ]
 ```
 
+In this example, instead of manually adding `tags: ['users']` and `security: [{ bearerAuth: [] }]` to each route, the preset automatically applies these properties to all routes within the registration context.
+
 ## Advanced Usage
 
-### Chaining Multiple Handlers
+### Multiple Handlers
 
 Apply multiple transformations by providing an array of handlers:
 
