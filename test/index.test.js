@@ -221,7 +221,7 @@ test('should work with array of "onPresetRoute"', async (t) => {
 
   t.assert.strictEqual(routes.length, 2)
   t.assert.deepStrictEqual(routes[0].schema.tags, ['example'])
-  t.assert.deepStrictEqual(routes[0].constraints.version, '1.0.0')
+  t.assert.strictEqual(routes[0].constraints.version, '1.0.0')
   t.assert.deepStrictEqual(routes[1].schema.tags, ['example'])
-  t.assert.deepStrictEqual(routes[1].constraints.version, '1.0.0')
+  t.assert.strictEqual(routes[1].constraints.version, '1.0.0')
 })
