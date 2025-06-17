@@ -129,6 +129,14 @@ The resulting routes will have the preset configurations automatically applied:
 // POST /user/ - with tags: ['user'], version: '1.0.0'
 ```
 
+## Ignoring Preset for Specific Routes
+
+You can opt out of applying a preset configuration to specific routes by setting `config.presetRoute` to `false` within the route definition.
+
+```javascript
+fastify.get('/ignore', { config: { presetRoute: false } }, () => {})
+```
+
 ## Advanced Usage
 
 ### Multiple Handlers
