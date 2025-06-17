@@ -31,7 +31,7 @@ function plugin(fastify, pluginOptions, next) {
   })
 
   fastify.addHook('onRoute', function (routeOptions) {
-    if (this[kRoutePreset]) {
+    if (this[kRoutePreset] && routeOptions.config?.presetRoute !== false) {
       for (const fn of onPresetRouteFns) {
         fn(routeOptions, this[kRoutePreset])
       }
