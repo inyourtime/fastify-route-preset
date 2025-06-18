@@ -43,3 +43,5 @@ app.register(fastifyRoutePreset, {
     expect(presetOptions).type.toBe<PresetOptions>()
   },
 })
+
+app.get('/foo', { config: { skipPreset: true } }, () => {})

@@ -1,5 +1,14 @@
 import type { FastifyPluginCallback, RouteOptions } from 'fastify'
 
+declare module 'fastify' {
+  interface FastifyContextConfig {
+    /**
+     * If set to `true`, the route will not be registered with a preset configuration.
+     */
+    skipPreset?: boolean
+  }
+}
+
 type FastifyRoutePreset = FastifyPluginCallback<fastifyRoutePreset.FastifyRoutePresetOptions>
 
 declare namespace fastifyRoutePreset {

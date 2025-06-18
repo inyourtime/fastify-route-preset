@@ -129,6 +129,14 @@ The resulting routes will have the preset configurations automatically applied:
 // POST /user/ - with tags: ['user'], version: '1.0.0'
 ```
 
+## Ignoring Preset for Specific Routes
+
+Presets are applied by default; set `skipPreset: true` to opt out
+
+```javascript
+fastify.get('/ignore', { config: { skipPreset: true } }, () => {})
+```
+
 ## Advanced Usage
 
 ### Multiple Handlers

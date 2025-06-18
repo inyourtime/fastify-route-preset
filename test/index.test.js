@@ -225,3 +225,47 @@ test('should work with array of "onPresetRoute"', async (t) => {
   t.assert.deepStrictEqual(routes[1].schema.tags, ['example'])
   t.assert.strictEqual(routes[1].constraints.version, '1.0.0')
 })
+
+test('should ignore route preset if "skipPreset" config are true', async (t) => {
+  t.plan(4)
+  const fastify = Fastify({ exposeHeadRoutes: false })
+
+  let presetCalls = 0
+
+  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(fastifyRoutePreset, {
+    onPresetRoute: (routeOptions, presetOptions) => {
+      routeOptions.schema = {
+        ...presetOptions.schema,
+        ...routeOptions.schema,
+      }
+
+      presetCalls++
+    },
+  })
+
+  fastify.register(
+    async (fastify) => {
+      fastify.get('/', async () => {
+        return { users: [] }
+      })
+
+      fastify.get('/ignore', { config: { skipPreset: true } }, async () => {
+        return { users: [] }
+      })
+    },
+    {
+      preset: {
+        schema: { tags: ['users'] },
+      },
+    },
+  )
+
+  await fastify.ready()
+  const routes = fastify.routes()
+
+  t.assert.strictEqual(presetCalls, 1)
+  t.assert.strictEqual(routes.length, 2)
+  t.assert.deepStrictEqual(routes[0].schema.tags, ['users'])
+  t.assert.strictEqual(routes[1].schema, undefined)
+})
