@@ -226,11 +226,11 @@ test('should work with array of "onPresetRoute"', async (t) => {
   t.assert.strictEqual(routes[1].constraints.version, '1.0.0')
 })
 
-test('should ignore route preset if "presetRoute" config are false', async (t) => {
+test('should ignore route preset if "skipPreset" config are true', async (t) => {
   t.plan(4)
   const fastify = Fastify({ exposeHeadRoutes: false })
 
-  let runner = 0
+  let presetCalls = 0
 
   fastify.register(require('./fixtures/utils').printRoutes)
   fastify.register(fastifyRoutePreset, {
@@ -240,7 +240,7 @@ test('should ignore route preset if "presetRoute" config are false', async (t) =
         ...routeOptions.schema,
       }
 
-      runner++
+      presetCalls++
     },
   })
 
@@ -250,7 +250,7 @@ test('should ignore route preset if "presetRoute" config are false', async (t) =
         return { users: [] }
       })
 
-      fastify.get('/ignore', { config: { presetRoute: false } }, async () => {
+      fastify.get('/ignore', { config: { skipPreset: true } }, async () => {
         return { users: [] }
       })
     },
@@ -264,7 +264,7 @@ test('should ignore route preset if "presetRoute" config are false', async (t) =
   await fastify.ready()
   const routes = fastify.routes()
 
-  t.assert.strictEqual(runner, 1)
+  t.assert.strictEqual(presetCalls, 1)
   t.assert.strictEqual(routes.length, 2)
   t.assert.deepStrictEqual(routes[0].schema.tags, ['users'])
   t.assert.strictEqual(routes[1].schema, undefined)

@@ -3,9 +3,9 @@ import type { FastifyPluginCallback, RouteOptions } from 'fastify'
 declare module 'fastify' {
   interface FastifyContextConfig {
     /**
-     * If set to `false`, the route will not be registered with a preset configuration.
+     * If set to `true`, the route will not be registered with a preset configuration.
      */
-    presetRoute?: boolean
+    skipPreset?: boolean
   }
 }
 

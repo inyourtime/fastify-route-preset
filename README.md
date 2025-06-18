@@ -131,10 +131,10 @@ The resulting routes will have the preset configurations automatically applied:
 
 ## Ignoring Preset for Specific Routes
 
-You can opt out of applying a preset configuration to specific routes by setting `config.presetRoute` to `false` within the route definition.
+Presets are applied by default; set `skipPreset: true` to opt out
 
 ```javascript
-fastify.get('/ignore', { config: { presetRoute: false } }, () => {})
+fastify.get('/ignore', { config: { skipPreset: true } }, () => {})
 ```
 
 ## Advanced Usage

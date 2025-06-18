@@ -44,4 +44,4 @@ app.register(fastifyRoutePreset, {
   },
 })
 
-app.get('/foo', { config: { presetRoute: false } }, () => {})
+app.get('/foo', { config: { skipPreset: true } }, () => {})
