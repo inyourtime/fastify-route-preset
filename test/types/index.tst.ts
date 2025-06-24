@@ -1,5 +1,5 @@
-import Fastify from 'fastify'
 import type { RouteOptions } from 'fastify'
+import Fastify from 'fastify'
 import { expect } from 'tstyche'
 import fastifyRoutePreset from '../..'
 
