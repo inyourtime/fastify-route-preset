@@ -19,7 +19,7 @@ npm install fastify-route-preset
 
 | Plugin Version | Fastify Version |
 |:--------------:|:---------------:|
-| `>=0.x`        | `^5.x`          |
+| `>=1.x`        | `^5.x`          |
 
 ## Usage
 
