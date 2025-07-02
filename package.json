@@ -1,6 +1,6 @@
 {
   "name": "fastify-route-preset",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "A Fastify plugin for applying reusable route configurations through preset-based modifications.",
   "type": "commonjs",
   "main": "index.js",
