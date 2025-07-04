@@ -3,7 +3,7 @@
 [![CI](https://github.com/inyourtime/fastify-route-preset/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/inyourtime/fastify-route-preset/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/fastify-route-preset.svg?style=flat)](https://www.npmjs.com/package/fastify-route-preset)
 [![Checked with Biome](https://img.shields.io/badge/Checked_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](./LICENSE)
 
 A Fastify plugin that streamlines route configuration through preset-based modifications. Define reusable route patterns and apply them consistently across your application using `onRoute` hooks.
 
