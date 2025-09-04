@@ -9,7 +9,7 @@
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "c8 --100 node --test **/*.test.js",
+    "test:unit": "c8 --100 node --test",
     "test:typescript": "tstyche"
   },
   "repository": {
