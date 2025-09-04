@@ -11,6 +11,7 @@ function plugin(fastify, pluginOptions, next) {
   fastify.decorate(kRoutePreset, null)
 
   let onPresetRouteFns = pluginOptions.onPresetRoute
+  const onRegister = pluginOptions.onRegister
 
   if (typeof onPresetRouteFns === 'function') {
     onPresetRouteFns = [onPresetRouteFns]
@@ -26,6 +27,10 @@ function plugin(fastify, pluginOptions, next) {
       instance[kRoutePreset] = {
         ...instance[kRoutePreset],
         ...registerOptions.preset,
+      }
+
+      if (typeof onRegister === 'function') {
+        onRegister.call(instance, instance, registerOptions.preset)
       }
     }
   })

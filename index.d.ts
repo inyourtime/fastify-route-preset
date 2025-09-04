@@ -1,4 +1,4 @@
-import type { FastifyPluginCallback, RouteOptions } from 'fastify'
+import type { FastifyInstance, FastifyPluginCallback, RouteOptions } from 'fastify'
 
 declare module 'fastify' {
   interface FastifyContextConfig {
@@ -28,6 +28,21 @@ declare namespace fastifyRoutePreset {
      * ```
      */
     onPresetRoute: OnPresetRoute | OnPresetRoute[]
+    /**
+     * A function that will be called when a route plugin is registered with a preset.
+     * The function will be called with the Fastify instance and the preset options.
+     * 
+     * @example
+     * ```js
+     * fastify.register(fastifyRoutePreset, {
+     *   onRegister: (instance, presetOptions) => {
+     *     console.log(instance)
+     *     console.log(presetOptions)
+     *   },
+     })
+     * ```
+     */
+    onRegister?: (instance: FastifyInstance, presetOptions: any) => void
   }
 
   export type OnPresetRoute = (routeOptions: RouteOptions, presetOptions: any) => void
