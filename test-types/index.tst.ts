@@ -10,6 +10,7 @@ app.register(fastifyRoutePreset, {
     expect(routeOptions).type.toBe<RouteOptions>()
     expect(presetOptions).type.toBe<any>()
   },
+  skipHeadRoutes: true,
 })
 
 app.register(fastifyRoutePreset, {
@@ -19,6 +20,7 @@ app.register(fastifyRoutePreset, {
       expect(presetOptions).type.toBe<any>()
     },
   ],
+  skipHeadRoutes: false,
 })
 
 app.register(fastifyRoutePreset, {

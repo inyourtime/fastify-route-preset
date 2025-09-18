@@ -139,6 +139,26 @@ Presets are applied by default; set `skipPreset: true` to opt out
 fastify.get('/ignore', { config: { skipPreset: true } }, () => {})
 ```
 
+## Skip HEAD Routes Globally
+
+If you want to exclude all HEAD routes from preset application, use the `skipHeadRoutes` plugin option
+(default is false)
+
+```javascript
+fastify.register(fastifyRoutePreset, {
+  skipHeadRoutes: true, // Skip preset application for all HEAD routes
+  onPresetRoute: (routeOptions, presetOptions) => {
+    // This will not be called for HEAD routes
+    routeOptions.schema = {
+      ...presetOptions.schema,
+      ...routeOptions.schema,
+    }
+  }
+})
+```
+
+> **Note:** This affects auto-exposed HEAD routes only when Fastify is created with exposeHeadRoutes: true (default in v5). If exposeHeadRoutes is false, only explicitly declared HEAD routes are affected.
+
 ## Advanced Usage
 
 ### Multiple Handlers
