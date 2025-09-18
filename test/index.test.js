@@ -271,14 +271,16 @@ test('should ignore route preset if "skipPreset" config are true', async (t) => 
 })
 
 test('should work with "skipHeadRoutes" config (default)', async (t) => {
-  t.plan(1)
+  t.plan(2)
   const fastify = Fastify()
 
   let presetCalls = 0
+  const methods = []
 
   fastify.register(fastifyRoutePreset, {
-    onPresetRoute: (_routeOptions, _presetOptions) => {
+    onPresetRoute: (routeOptions, _presetOptions) => {
       presetCalls++
+      methods.push(routeOptions.method)
     },
   })
 
@@ -298,18 +300,21 @@ test('should work with "skipHeadRoutes" config (default)', async (t) => {
   await fastify.ready()
 
   t.assert.strictEqual(presetCalls, 2)
+  t.assert.deepStrictEqual(methods, ['GET', 'HEAD'])
 })
 
 test('should work with "skipHeadRoutes" config is false', async (t) => {
-  t.plan(1)
+  t.plan(2)
   const fastify = Fastify()
 
   let presetCalls = 0
+  const methods = []
 
   fastify.register(fastifyRoutePreset, {
     skipHeadRoutes: false,
-    onPresetRoute: (_routeOptions, _presetOptions) => {
+    onPresetRoute: (routeOptions, _presetOptions) => {
       presetCalls++
+      methods.push(routeOptions.method)
     },
   })
 
@@ -329,18 +334,21 @@ test('should work with "skipHeadRoutes" config is false', async (t) => {
   await fastify.ready()
 
   t.assert.strictEqual(presetCalls, 2)
+  t.assert.deepStrictEqual(methods, ['GET', 'HEAD'])
 })
 
 test('should work with "skipHeadRoutes" config is true', async (t) => {
-  t.plan(1)
+  t.plan(2)
   const fastify = Fastify()
 
   let presetCalls = 0
+  const methods = []
 
   fastify.register(fastifyRoutePreset, {
     skipHeadRoutes: true,
-    onPresetRoute: (_routeOptions, _presetOptions) => {
+    onPresetRoute: (routeOptions, _presetOptions) => {
       presetCalls++
+      methods.push(routeOptions.method)
     },
   })
 
@@ -360,4 +368,5 @@ test('should work with "skipHeadRoutes" config is true', async (t) => {
   await fastify.ready()
 
   t.assert.strictEqual(presetCalls, 1)
+  t.assert.deepStrictEqual(methods, ['GET'])
 })
