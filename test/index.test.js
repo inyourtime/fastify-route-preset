@@ -269,6 +269,107 @@ test('should ignore route preset if "skipPreset" config are true', async (t) => 
   t.assert.deepStrictEqual(routes[0].schema.tags, ['users'])
   t.assert.strictEqual(routes[1].schema, undefined)
 })
+          
+test('should work with "skipHeadRoutes" config (default)', async (t) => {
+  t.plan(2)
+  const fastify = Fastify({ exposeHeadRoutes: true })
+
+  let presetCalls = 0
+  const methods = []
+
+  fastify.register(fastifyRoutePreset, {
+    onPresetRoute: (routeOptions, _presetOptions) => {
+      presetCalls++
+      methods.push(routeOptions.method)
+    },
+  })
+
+  fastify.register(
+    async (fastify) => {
+      fastify.get('/', async () => {
+        return { users: [] }
+      })
+    },
+    {
+      preset: {
+        schema: { tags: ['users'] },
+      },
+    },
+  )
+
+  await fastify.ready()
+
+  t.assert.strictEqual(presetCalls, 2)
+  t.assert.deepStrictEqual(methods.sort(), ['GET', 'HEAD'])
+})
+
+test('should work with "skipHeadRoutes" config is false', async (t) => {
+  t.plan(2)
+  const fastify = Fastify({ exposeHeadRoutes: true })
+
+  let presetCalls = 0
+  const methods = []
+
+  fastify.register(fastifyRoutePreset, {
+    skipHeadRoutes: false,
+    onPresetRoute: (routeOptions, _presetOptions) => {
+      presetCalls++
+      methods.push(routeOptions.method)
+    },
+  })
+
+  fastify.register(
+    async (fastify) => {
+      fastify.get('/', async () => {
+        return { users: [] }
+      })
+    },
+    {
+      preset: {
+        schema: { tags: ['users'] },
+      },
+    },
+  )
+
+  await fastify.ready()
+
+  t.assert.strictEqual(presetCalls, 2)
+  t.assert.deepStrictEqual(methods.sort(), ['GET', 'HEAD'])
+})
+
+test('should work with "skipHeadRoutes" config is true', async (t) => {
+  t.plan(2)
+  const fastify = Fastify({ exposeHeadRoutes: true })
+
+  let presetCalls = 0
+  const methods = []
+
+  fastify.register(fastifyRoutePreset, {
+    skipHeadRoutes: true,
+    onPresetRoute: (routeOptions, _presetOptions) => {
+      presetCalls++
+      methods.push(routeOptions.method)
+    },
+  })
+
+  fastify.register(
+    async (fastify) => {
+      fastify.get('/', async () => {
+        return { users: [] }
+      })
+    },
+    {
+      preset: {
+        schema: { tags: ['users'] },
+      },
+    },
+  )
+
+  await fastify.ready()
+
+  t.assert.strictEqual(presetCalls, 1)
+  t.assert.deepStrictEqual(methods, ['GET'])
+})
 
 test.only('should run "onRegister" hook', async (t) => {
   t.plan(3)

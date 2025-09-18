@@ -11,6 +11,7 @@ function plugin(fastify, pluginOptions, next) {
   fastify.decorate(kRoutePreset, null)
 
   let onPresetRouteFns = pluginOptions.onPresetRoute
+  const skipHeadRoutes = pluginOptions.skipHeadRoutes || false
   const onRegister = pluginOptions.onRegister
 
   if (typeof onPresetRouteFns === 'function') {
@@ -36,10 +37,16 @@ function plugin(fastify, pluginOptions, next) {
   })
 
   fastify.addHook('onRoute', function (routeOptions) {
-    if (this[kRoutePreset] && !routeOptions.config?.skipPreset) {
-      for (const fn of onPresetRouteFns) {
-        fn(routeOptions, this[kRoutePreset])
-      }
+    if (!this[kRoutePreset] || routeOptions.config?.skipPreset) {
+      return
+    }
+
+    if (skipHeadRoutes && routeOptions.method === 'HEAD') {
+      return
+    }
+
+    for (const fn of onPresetRouteFns) {
+      fn(routeOptions, this[kRoutePreset])
     }
   })
 
