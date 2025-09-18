@@ -272,7 +272,7 @@ test('should ignore route preset if "skipPreset" config are true', async (t) => 
 
 test('should work with "skipHeadRoutes" config (default)', async (t) => {
   t.plan(2)
-  const fastify = Fastify()
+  const fastify = Fastify({ exposeHeadRoutes: true })
 
   let presetCalls = 0
   const methods = []
@@ -300,12 +300,12 @@ test('should work with "skipHeadRoutes" config (default)', async (t) => {
   await fastify.ready()
 
   t.assert.strictEqual(presetCalls, 2)
-  t.assert.deepStrictEqual(methods, ['GET', 'HEAD'])
+  t.assert.deepStrictEqual(methods.sort(), ['GET', 'HEAD'])
 })
 
 test('should work with "skipHeadRoutes" config is false', async (t) => {
   t.plan(2)
-  const fastify = Fastify()
+  const fastify = Fastify({ exposeHeadRoutes: true })
 
   let presetCalls = 0
   const methods = []
@@ -334,12 +334,12 @@ test('should work with "skipHeadRoutes" config is false', async (t) => {
   await fastify.ready()
 
   t.assert.strictEqual(presetCalls, 2)
-  t.assert.deepStrictEqual(methods, ['GET', 'HEAD'])
+  t.assert.deepStrictEqual(methods.sort(), ['GET', 'HEAD'])
 })
 
 test('should work with "skipHeadRoutes" config is true', async (t) => {
   t.plan(2)
-  const fastify = Fastify()
+  const fastify = Fastify({ exposeHeadRoutes: true })
 
   let presetCalls = 0
   const methods = []

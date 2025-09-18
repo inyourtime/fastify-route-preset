@@ -14,7 +14,8 @@ type FastifyRoutePreset = FastifyPluginCallback<fastifyRoutePreset.FastifyRouteP
 declare namespace fastifyRoutePreset {
   export interface FastifyRoutePresetOptions {
     /**
-     * If set to `true`, the head routes will not be registered with a preset configuration.
+     * If set to `true`, HEAD routes will not be registered with a preset configuration.
+     * Skips both auto-exposed HEADs and user-declared HEAD routes.
      *
      * @default false
      */

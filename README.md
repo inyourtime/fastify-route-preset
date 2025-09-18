@@ -157,6 +157,8 @@ fastify.register(fastifyRoutePreset, {
 })
 ```
 
+> **Note:** This affects auto-exposed HEAD routes only when Fastify is created with exposeHeadRoutes: true (default in v5). If exposeHeadRoutes is false, only explicitly declared HEAD routes are affected.
+
 ## Advanced Usage
 
 ### Multiple Handlers
