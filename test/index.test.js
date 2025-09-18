@@ -269,3 +269,95 @@ test('should ignore route preset if "skipPreset" config are true', async (t) => 
   t.assert.deepStrictEqual(routes[0].schema.tags, ['users'])
   t.assert.strictEqual(routes[1].schema, undefined)
 })
+
+test('should work with "skipHeadRoutes" config (default)', async (t) => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  let presetCalls = 0
+
+  fastify.register(fastifyRoutePreset, {
+    onPresetRoute: (_routeOptions, _presetOptions) => {
+      presetCalls++
+    },
+  })
+
+  fastify.register(
+    async (fastify) => {
+      fastify.get('/', async () => {
+        return { users: [] }
+      })
+    },
+    {
+      preset: {
+        schema: { tags: ['users'] },
+      },
+    },
+  )
+
+  await fastify.ready()
+
+  t.assert.strictEqual(presetCalls, 2)
+})
+
+test('should work with "skipHeadRoutes" config is false', async (t) => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  let presetCalls = 0
+
+  fastify.register(fastifyRoutePreset, {
+    skipHeadRoutes: false,
+    onPresetRoute: (_routeOptions, _presetOptions) => {
+      presetCalls++
+    },
+  })
+
+  fastify.register(
+    async (fastify) => {
+      fastify.get('/', async () => {
+        return { users: [] }
+      })
+    },
+    {
+      preset: {
+        schema: { tags: ['users'] },
+      },
+    },
+  )
+
+  await fastify.ready()
+
+  t.assert.strictEqual(presetCalls, 2)
+})
+
+test('should work with "skipHeadRoutes" config is true', async (t) => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  let presetCalls = 0
+
+  fastify.register(fastifyRoutePreset, {
+    skipHeadRoutes: true,
+    onPresetRoute: (_routeOptions, _presetOptions) => {
+      presetCalls++
+    },
+  })
+
+  fastify.register(
+    async (fastify) => {
+      fastify.get('/', async () => {
+        return { users: [] }
+      })
+    },
+    {
+      preset: {
+        schema: { tags: ['users'] },
+      },
+    },
+  )
+
+  await fastify.ready()
+
+  t.assert.strictEqual(presetCalls, 1)
+})
