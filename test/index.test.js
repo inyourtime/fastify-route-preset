@@ -269,7 +269,7 @@ test('should ignore route preset if "skipPreset" config are true', async (t) => 
   t.assert.deepStrictEqual(routes[0].schema.tags, ['users'])
   t.assert.strictEqual(routes[1].schema, undefined)
 })
-
+          
 test('should work with "skipHeadRoutes" config (default)', async (t) => {
   t.plan(2)
   const fastify = Fastify({ exposeHeadRoutes: true })
@@ -369,4 +369,31 @@ test('should work with "skipHeadRoutes" config is true', async (t) => {
 
   t.assert.strictEqual(presetCalls, 1)
   t.assert.deepStrictEqual(methods, ['GET'])
+})
+
+test.only('should run "onRegister" hook', async (t) => {
+  t.plan(3)
+  const fastify = Fastify()
+
+  let registerCalls = 0
+
+  fastify.register(fastifyRoutePreset, {
+    onRegister: function (instance, preset) {
+      console.log(this)
+      registerCalls++
+      t.assert.ok(instance)
+      t.assert.deepStrictEqual(preset, { constraints: { version: '1.0.0' } })
+    },
+    onPresetRoute: [],
+  })
+
+  fastify.register(require('./fixtures/route'), {
+    preset: {
+      constraints: { version: '1.0.0' },
+    },
+  })
+
+  await fastify.ready()
+
+  t.assert.strictEqual(registerCalls, 1)
 })
