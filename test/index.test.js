@@ -1,11 +1,13 @@
-'use strict'
-
-const { test } = require('node:test')
-const Fastify = require('fastify')
-const fastifyRoutePreset = require('..')
+import { test } from 'node:test'
+import Fastify from 'fastify'
+import fastifyRoutePreset, { fastifyRoutePreset as namedFastifyRoutePreset } from '../index.js'
+import { presetSchema, presetVersion } from './fixtures/preset.js'
+import routePlugin from './fixtures/route.js'
+import route2Plugin from './fixtures/route2.js'
+import { printRoutes } from './fixtures/utils.js'
 
 test('register plugin success', async (t) => {
-  t.plan(1)
+  t.plan(2)
   const fastify = Fastify()
 
   fastify.register(fastifyRoutePreset, {
@@ -15,6 +17,7 @@ test('register plugin success', async (t) => {
   await fastify.ready()
 
   t.assert.ok(fastify.hasPlugin('fastify-route-preset'))
+  t.assert.strictEqual(fastifyRoutePreset, namedFastifyRoutePreset)
 })
 
 test('should require "onPresetRoute"', async (t) => {
@@ -89,7 +92,7 @@ test('should run "onPresetRoute"', async (t) => {
     },
   })
 
-  fastify.register(require('./fixtures/route'), {
+  fastify.register(routePlugin, {
     preset: {
       constraints: { version: '1.0.0' },
     },
@@ -104,7 +107,7 @@ test('should apply presetOptions to routeOptions', async (t) => {
   t.plan(3)
   const fastify = Fastify()
 
-  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(printRoutes)
   fastify.register(fastifyRoutePreset, {
     onPresetRoute: (routeOptions, presetOptions) => {
       routeOptions.constraints = {
@@ -114,7 +117,7 @@ test('should apply presetOptions to routeOptions', async (t) => {
     },
   })
 
-  fastify.register(require('./fixtures/route'), {
+  fastify.register(routePlugin, {
     preset: {
       constraints: { version: '1.0.0' },
     },
@@ -133,7 +136,7 @@ test('should apply schema to routeOptions', async (t) => {
   t.plan(3)
   const fastify = Fastify()
 
-  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(printRoutes)
   fastify.register(fastifyRoutePreset, {
     onPresetRoute: (routeOptions, presetOptions) => {
       routeOptions.schema = {
@@ -143,7 +146,7 @@ test('should apply schema to routeOptions', async (t) => {
     },
   })
 
-  fastify.register(require('./fixtures/route'), {
+  fastify.register(routePlugin, {
     preset: {
       schema: { tags: ['example'] },
     },
@@ -162,7 +165,7 @@ test('should work with multiple presets', async (t) => {
   t.plan(5)
   const fastify = Fastify()
 
-  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(printRoutes)
   fastify.register(fastifyRoutePreset, {
     onPresetRoute: (routeOptions, presetOptions) => {
       routeOptions.schema = {
@@ -172,13 +175,13 @@ test('should work with multiple presets', async (t) => {
     },
   })
 
-  fastify.register(require('./fixtures/route'), {
+  fastify.register(routePlugin, {
     prefix: '/route1',
     preset: {
       schema: { tags: ['route1'] },
     },
   })
-  fastify.register(require('./fixtures/route2'), {
+  fastify.register(route2Plugin, {
     prefix: '/route2',
     preset: {
       schema: { tags: ['route2'] },
@@ -200,15 +203,12 @@ test('should work with array of "onPresetRoute"', async (t) => {
   t.plan(5)
   const fastify = Fastify()
 
-  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(printRoutes)
   fastify.register(fastifyRoutePreset, {
-    onPresetRoute: [
-      require('./fixtures/preset').presetSchema,
-      require('./fixtures/preset').presetVersion,
-    ],
+    onPresetRoute: [presetSchema, presetVersion],
   })
 
-  fastify.register(require('./fixtures/route'), {
+  fastify.register(routePlugin, {
     preset: {
       schema: { tags: ['example'] },
       constraints: { version: '1.0.0' },
@@ -232,7 +232,7 @@ test('should ignore route preset if "skipPreset" config are true', async (t) => 
 
   let presetCalls = 0
 
-  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(printRoutes)
   fastify.register(fastifyRoutePreset, {
     onPresetRoute: (routeOptions, presetOptions) => {
       routeOptions.schema = {

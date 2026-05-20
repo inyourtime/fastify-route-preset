@@ -2,8 +2,15 @@
   "name": "fastify-route-preset",
   "version": "1.0.2",
   "description": "A Fastify plugin for applying reusable route configurations through preset-based modifications.",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  },
   "types": "index.d.ts",
   "scripts": {
     "lint": "biome check",

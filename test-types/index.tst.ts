@@ -1,7 +1,9 @@
 import type { RouteOptions } from 'fastify'
 import Fastify from 'fastify'
+import fastifyRoutePreset, {
+  fastifyRoutePreset as namedFastifyRoutePreset,
+} from 'fastify-route-preset'
 import { expect } from 'tstyche'
-import fastifyRoutePreset from '..'
 
 const app = Fastify()
 
@@ -44,6 +46,10 @@ app.register(fastifyRoutePreset, {
     expect(routeOptions).type.toBe<RouteOptions>()
     expect(presetOptions).type.toBe<PresetOptions>()
   },
+})
+
+app.register(namedFastifyRoutePreset, {
+  onPresetRoute: [],
 })
 
 app.get('/foo', { config: { skipPreset: true } }, () => {})

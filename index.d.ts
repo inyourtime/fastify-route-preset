@@ -23,7 +23,7 @@ declare namespace fastifyRoutePreset {
     /**
      * A function or array of functions that will be called when a route is registered with a preset.
      * The function will be called with the route options and the preset options.
-     * 
+     *
      * @example
      * ```js
      * fastify.register(fastifyRoutePreset, {
@@ -38,13 +38,11 @@ declare namespace fastifyRoutePreset {
   }
 
   export type OnPresetRoute = (routeOptions: RouteOptions, presetOptions: any) => void
-
-  export const fastifyRoutePreset: FastifyRoutePreset
-  export { fastifyRoutePreset as default }
 }
 
-declare function fastifyRoutePreset(
-  ...params: Parameters<FastifyRoutePreset>
-): ReturnType<FastifyRoutePreset>
+declare const fastifyRoutePreset: FastifyRoutePreset
 
-export = fastifyRoutePreset
+export type FastifyRoutePresetOptions = fastifyRoutePreset.FastifyRoutePresetOptions
+export type OnPresetRoute = fastifyRoutePreset.OnPresetRoute
+export { fastifyRoutePreset }
+export default fastifyRoutePreset

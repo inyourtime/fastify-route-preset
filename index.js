@@ -1,11 +1,9 @@
-'use strict'
-
-const fp = require('fastify-plugin')
+import fp from 'fastify-plugin'
 
 const kRoutePreset = Symbol('fastifyRoutePreset')
 
 /**
- * @type {import('fastify').FastifyPluginCallback<import('.').FastifyRoutePresetOptions>}
+ * @type {import('fastify').FastifyPluginCallback<import('./index.js').FastifyRoutePresetOptions>}
  */
 function plugin(fastify, pluginOptions, next) {
   fastify.decorate(kRoutePreset, null)
@@ -53,6 +51,5 @@ const fastifyRoutePreset = fp(plugin, {
   name: 'fastify-route-preset',
 })
 
-module.exports = fastifyRoutePreset
-module.exports.default = fastifyRoutePreset
-module.exports.fastifyRoutePreset = fastifyRoutePreset
+export { fastifyRoutePreset }
+export default fastifyRoutePreset

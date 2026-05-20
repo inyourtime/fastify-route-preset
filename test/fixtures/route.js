@@ -1,9 +1,7 @@
-'use strict'
-
 /**
  * @type {import('fastify').FastifyPluginAsync<>}
  */
-module.exports = async function (fastify) {
+export default async function (fastify) {
   fastify.post('/example/post', function (_req, reply) {
     reply.send({ hello: 'world' })
   })

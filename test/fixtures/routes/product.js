@@ -1,9 +1,7 @@
-'use strict'
-
 /**
  * @type {import('fastify').FastifyPluginAsync<>}
  */
-module.exports = async function (fastify) {
+export default async function (fastify) {
   fastify.get('/', function (_req, reply) {
     reply.send({ hello: 'world' })
   })
@@ -13,7 +11,7 @@ module.exports = async function (fastify) {
   })
 }
 
-module.exports.autoConfig = {
+export const autoConfig = {
   prefix: '/product',
   preset: {
     schema: { tags: ['product'] },

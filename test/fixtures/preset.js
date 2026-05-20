@@ -1,5 +1,3 @@
-'use strict'
-
 const presetSchema = (routeOptions, preset) => {
   routeOptions.schema = {
     ...preset.schema,
@@ -14,7 +12,4 @@ const presetVersion = (routeOptions, preset) => {
   }
 }
 
-module.exports = {
-  presetSchema,
-  presetVersion,
-}
+export { presetSchema, presetVersion }
