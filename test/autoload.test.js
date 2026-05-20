@@ -1,25 +1,26 @@
-'use strict'
+import { dirname, join } from 'node:path'
+import { test } from 'node:test'
+import { fileURLToPath } from 'node:url'
+import fastifyAutoload from '@fastify/autoload'
+import Fastify from 'fastify'
+import fastifyRoutePreset from '../index.js'
+import { presetSchema, presetVersion } from './fixtures/preset.js'
+import { printRoutes } from './fixtures/utils.js'
 
-const { test } = require('node:test')
-const Fastify = require('fastify')
-const fastifyRoutePreset = require('..')
-const path = require('node:path')
-const fastifyAutoload = require('@fastify/autoload')
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 test('should work with @fastify/autoload', async (t) => {
   t.plan(9)
   const fastify = Fastify({ exposeHeadRoutes: false })
 
-  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(printRoutes)
   fastify.register(fastifyRoutePreset, {
-    onPresetRoute: [
-      require('./fixtures/preset').presetSchema,
-      require('./fixtures/preset').presetVersion,
-    ],
+    onPresetRoute: [presetSchema, presetVersion],
   })
 
   fastify.register(fastifyAutoload, {
-    dir: path.join(__dirname, 'fixtures/routes'),
+    dir: join(__dirname, 'fixtures/routes'),
     dirNameRoutePrefix: false,
   })
 
@@ -44,21 +45,18 @@ test('should work with @fastify/autoload (multiple instances)', async (t) => {
   t.plan(9)
   const fastify = Fastify({ exposeHeadRoutes: false })
 
-  fastify.register(require('./fixtures/utils').printRoutes)
+  fastify.register(printRoutes)
   fastify.register(fastifyRoutePreset, {
-    onPresetRoute: [
-      require('./fixtures/preset').presetSchema,
-      require('./fixtures/preset').presetVersion,
-    ],
+    onPresetRoute: [presetSchema, presetVersion],
   })
 
   fastify.register(fastifyAutoload, {
-    dir: path.join(__dirname, 'fixtures/users'),
+    dir: join(__dirname, 'fixtures/users'),
     dirNameRoutePrefix: false,
     options: { prefix: '/user' },
   })
   fastify.register(fastifyAutoload, {
-    dir: path.join(__dirname, 'fixtures/products'),
+    dir: join(__dirname, 'fixtures/products'),
     dirNameRoutePrefix: false,
     options: { prefix: '/product' },
   })

@@ -1,6 +1,4 @@
-'use strict'
-
-const fp = require('fastify-plugin')
+import fp from 'fastify-plugin'
 
 const printRoutes = fp((fastify, _options, next) => {
   const routes = []
@@ -14,6 +12,4 @@ const printRoutes = fp((fastify, _options, next) => {
   next()
 })
 
-module.exports = {
-  printRoutes,
-}
+export { printRoutes }
